@@ -6,8 +6,9 @@ router.get('/', async (req,res) => {
     
     try{
         const projects = await projectmodel.getProjects();
-        console.log(projects);
-        projects.projectCompleted === 0 ? projects.projectCompleted = false : projects.projectCompleted = true;
+        projects.map(project => {
+            project.projectCompleted === 0 ? project.projectCompleted = false : project.projectCompleted = true
+        })
         res.status(200).json(projects);
     }
     catch({message}){
@@ -56,6 +57,19 @@ router.get('/tasks', async (req,res) => {
     
     try{
         const tasks = await projectmodel.getTasks();
+        tasks.map(task => {
+            if (task.taskCompleted === 0) {
+                task.taskCompleted = false ;
+            }
+            else { 
+                task.taskCompleted = true  ;
+            }
+            if(task.projectCompleted === 0) { 
+                task.projectCompleted = false ;
+            }else {
+                task.projectCompleted = true;
+            }
+        });
         res.status(200).json(tasks);
     }
     catch({message}){
